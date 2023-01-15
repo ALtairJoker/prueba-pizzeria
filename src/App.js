@@ -1,24 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
+import "bootstrap/dist/css/bootstrap.min.css";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navegacion from "./components/Navbar";
+import Home from "./views/home";
+import Carrito from "./views/carrito";
+import Detalle from "./views/Detalle";
+import context from "react-bootstrap/esm/AccordionContext";
+import { useState, useEffect } from "react";
 
 function App() {
+  const [pizzas, setPizzas] = useState([]);
+  const [carrito, setCarrito] = useState([]);
+  const [total, setTotal] = useState([0]);
+  const [nuevoCarrito, setNuevoCarrito] = useState([]);
+
+  useEffect(() => {
+    obtenerDatos();
+  }, []);
+
+  const obtenerDatos = async () => {
+    try {
+      const response = await fetch("./pizzas.json");
+      const data = await response.json();
+      setPizzas(data);
+    } catch (error) {
+      alert(error);
+    }
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <context.Provider
+      value={{ pizzas, setPizzas, carrito, setCarrito, total, setTotal, nuevoCarrito, setNuevoCarrito }}
+    >
+      <Router>
+        <Navegacion />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/carrito" element={<Carrito />} />
+          <Route path="/pizzas/:id" element={<Detalle />} />
+        </Routes>
+      </Router>
+    </context.Provider>
   );
 }
 
