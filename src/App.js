@@ -6,12 +6,15 @@ import Carrito from "./views/carrito";
 import Detalle from "./views/Detalle";
 import context from "react-bootstrap/esm/AccordionContext";
 import { useState, useEffect } from "react";
+import Loading from "./components/Loading";
 
 function App() {
   const [pizzas, setPizzas] = useState([]);
   const [carrito, setCarrito] = useState([]);
   const [total, setTotal] = useState([0]);
   const [nuevoCarrito, setNuevoCarrito] = useState([]);
+  const [loading, setLoading] = useState(false)
+
 
   useEffect(() => {
     obtenerDatos();
@@ -22,10 +25,26 @@ function App() {
       const response = await fetch("./pizzas.json");
       const data = await response.json();
       setPizzas(data);
+      cambiarEstado();
     } catch (error) {
       alert(error);
     }
   };
+
+  const cambiarEstado = () => {
+    setLoading(true)
+    setTimeout(() => {
+      setLoading(false)
+    },2500)
+  }
+
+  if(loading){
+    return(
+      <Loading/>
+    )
+  }
+
+ 
 
   return (
     <context.Provider
