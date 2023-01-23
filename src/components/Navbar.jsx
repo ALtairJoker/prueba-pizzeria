@@ -11,7 +11,7 @@ export default function Navegacion() {
 
   const setActiveClass = ({ isActive }) => (isActive ? "activo" : "inactivo");
   return (
-    <div>
+    <div className="fixed">
       <Navbar bg="info" variant="dark">
         <Container>
           <Navbar.Brand href="/home" className="fs-3 text deco">
